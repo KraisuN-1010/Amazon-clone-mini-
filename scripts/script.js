@@ -1,7 +1,7 @@
 let productHTML = '';
 
 products.forEach((product) => {
-    const { image, name, rating, priceCents} = product;
+    const { id, image, name, rating, priceCents} = product;
     productHTML += `
         <div class="product-container">
           <div class="product-image-container">
