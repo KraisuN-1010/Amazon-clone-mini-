@@ -1,4 +1,42 @@
-const cart = [];
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+function addToCart(productId, quantity) {
+  // Find if the product already exists in cart
+  let matchingItem;
+
+  cart.forEach((cartItem) => {
+    if (productId === cartItem.productId) {
+      matchingItem = cartItem;
+    }
+  });
+
+  if (matchingItem) {
+    matchingItem.quantity += quantity;
+  } else {
+    cart.push({
+      productId,
+      quantity
+    });
+  }
+
+  // Save to localStorage
+  localStorage.setItem('cart', JSON.stringify(cart));
+}
+
+function updateCartQuantity() {
+  let cartQuantity = 0;
+
+  cart.forEach((cartItem) => {
+    cartQuantity += cartItem.quantity;
+  });
+
+  document.querySelector('.cart-quantity').innerHTML = cartQuantity;
+}
+
+// Load the cart quantity when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+  updateCartQuantity();
+});
 
 // Add ONE event listener to the parent grid
 document.querySelector('.js-productGrid').addEventListener('click', (event) => {
@@ -13,32 +51,11 @@ document.querySelector('.js-productGrid').addEventListener('click', (event) => {
       .querySelector('.js-quantity-selector');
     const quantity = Number(quantitySelector.value);
 
-    // Find if the product already exists in cart
-    let matchingItem;
+    // Add the clicked product into cart
+    addToCart(productId, quantity);
 
-    cart.forEach((item) => {
-      if (productId === item.productId) {
-        matchingItem = item;
-      }
-    });
-
-    if (matchingItem) {
-      matchingItem.quantity += quantity;
-    } else {
-      cart.push({
-        productId,
-        quantity
-      });
-    }
-
-    // Update cart quantity display
-    let cartQuantity = 0;
-
-    cart.forEach((item) => {
-      cartQuantity += item.quantity;
-    });
-
-    document.querySelector('.cart-quantity').innerHTML = cartQuantity;
+    // Update the quantity showing in cart
+    updateCartQuantity();
 
     // Show the "Added" message
     const addedMessage = button.closest('.product-container')
