@@ -18,7 +18,7 @@ cart.forEach((cartItem) => {
     // Make sure matchingItem was found before generating HTML to avoid errors
     if (matchingItem) {
         generateHTML += `
-            <div class="cart-item-container">
+            <div class="cart-item-container js-productId-${matchingItem.id}">
                 <div class="delivery-date">
                     Delivery date: Tuesday, June 21
                 </div>
@@ -105,6 +105,8 @@ document.querySelectorAll(".js-deleteLink")
   .forEach((link) => {
       link.addEventListener('click', () => {
           const toDelete = link.dataset.productId;
+          const toDeleteHtml = document.querySelector(`.js-productId-${toDelete}`);
+          toDeleteHtml.remove();
           removeFromCart(toDelete);
       })
   });
